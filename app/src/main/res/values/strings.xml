@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">EasyTravel</string>
+
+    <string name="hintEmail">your@email.com</string>
+    <string name="hintPass">Password</string>
+    <string name="hintKonfPass">Konfrimasi Password</string>
+    <string name="hintFullName">Nama Lengkap</string>
+    <string name="btnRegis">Registrasi</string>
+    <string name="btnLog">Login</string>
+    <string name="toLogin">Login Di Sini</string>
+    <string name="toRegis">Register Di Sini</string>
+</resources>

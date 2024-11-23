@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1078980086460",
+    "project_id": "travelapp-40f3c",
+    "storage_bucket": "travelapp-40f3c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078980086460:android:e0c75fcfad3ec5aec59eb9",
+        "android_client_info": {
+          "package_name": "com.bagas.easytravel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJUeQrCISgP_hV_bGsVz4keYtezzyyttA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
