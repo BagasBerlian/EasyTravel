@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DaftarWisataActivity">
+
+    <!-- LinearLayout untuk Header -->
+    <LinearLayout
+        android:id="@+id/headerLayoutWisata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:layout_alignParentTop="true">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btnBackWisata"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/back_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="center_vertical" />
+
+        <!-- Title TextView -->
+        <TextView
+            android:id="@+id/tvTitleWisata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daftar Wisata"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewWisata"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerLayoutWisata"
+        android:layout_marginTop="16dp" />
+</RelativeLayout>

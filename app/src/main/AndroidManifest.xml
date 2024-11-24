@@ -13,6 +13,15 @@
         android:theme="@style/Theme.EasyTravel"
         tools:targetApi="31">
         <activity
+            android:name=".ListBookmarkActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DaftarKulinerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DaftarWisataActivity"
+            android:exported="false" />
+        <activity
             android:name=".DaftarHotelActivity"
             android:exported="false" />
         <activity

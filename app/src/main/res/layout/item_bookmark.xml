@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:cardCornerRadius="20dp"
+    android:cardElevation="10dp"
+    android:useCompatPadding="true">
+
+    <!-- LinearLayout untuk kontainer utama -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- ImageView untuk gambar bookmark -->
+        <ImageView
+            android:id="@+id/imgBookmark"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/iconn" <!-- Ganti dengan gambar bookmark -->
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="12dp" />
+
+        <!-- RelativeLayout untuk konten teks dan rating -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp">
+
+            <!-- Nama Bookmark -->
+            <TextView
+                android:id="@+id/tvBookmarkName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parang Gombong"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <!-- Rating dan Bintang -->
+            <LinearLayout
+                android:id="@+id/ratingLayoutBookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvBookmarkName"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- RatingBar -->
+                <RatingBar
+                    android:id="@+id/ratingBarBookmark"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:numStars="1"
+                    android:stepSize="1"
+                    android:rating="1"
+                    android:isIndicator="true"
+                    android:progressDrawable="@drawable/star_rating"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Nilai Rating -->
+                <TextView
+                    android:id="@+id/tvRatingBookmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4/5"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <!-- Tombol Hapus -->
+            <ImageView
+                android:id="@+id/btnDeleteBookmark"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/button_delete"
+                android:contentDescription="Delete Bookmark"
+                android:clickable="true"
+                android:focusable="true" />
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
