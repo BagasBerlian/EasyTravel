@@ -13,6 +13,9 @@
         android:theme="@style/Theme.EasyTravel"
         tools:targetApi="31">
         <activity
+            android:name=".CommentHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ListBookmarkActivity"
             android:exported="false" />
         <activity
