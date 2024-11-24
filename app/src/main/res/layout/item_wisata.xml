@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:cardCornerRadius="30dp"
+    android:cardElevation="15dp"
+    android:radius="20dp"
+    android:useCompatPadding="true">
+
+    <!-- LinearLayout untuk kontainer utama -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- ImageView untuk gambar wisata -->
+        <ImageView
+            android:id="@+id/imgWisata"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/iconn"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="12dp" />
+
+        <!-- RelativeLayout untuk konten teks dan rating -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp">
+
+            <!-- Nama Wisata -->
+            <TextView
+                android:id="@+id/tvWisataName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parang Gombong"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <!-- Rating dan Bintang -->
+            <LinearLayout
+                android:id="@+id/ratingLayoutWisata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvWisataName"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- RatingBar -->
+                <RatingBar
+                    android:id="@+id/ratingBarWisata"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:numStars="1"
+                    android:stepSize="1"
+                    android:rating="1"
+                    android:layout_gravity="center"
+                    android:isIndicator="true"
+                    android:layout_marginEnd="8dp"
+                    android:progressDrawable="@drawable/star_rating" />
+
+                <!-- Nilai Rating -->
+                <TextView
+                    android:id="@+id/tvRatingWisata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4/5"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

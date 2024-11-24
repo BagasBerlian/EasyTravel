@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ListBookmarkActivity">
+
+    <!-- LinearLayout untuk Header -->
+    <LinearLayout
+        android:id="@+id/headerLayoutBookmark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:layout_alignParentTop="true">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btnBackBookmark"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/back_button"
+            android:contentDescription="Back Button"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="center_vertical" />
+
+        <!-- Title TextView -->
+        <TextView
+            android:id="@+id/tvTitleBookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List Bookmark"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewBookmark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerLayoutBookmark"
+        android:layout_marginTop="16dp" />
+</RelativeLayout>
