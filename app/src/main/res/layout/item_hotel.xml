@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:cardCornerRadius="30dp"
-    android:cardElevation="15dp"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="15dp"
     android:radius="20dp"
-    android:useCompatPadding="true">
+    app:useCompatPadding="true">
 
     <!-- LinearLayout untuk kontainer utama -->
     <LinearLayout
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
         <!-- ImageView untuk gambar hotel -->
@@ -22,7 +24,7 @@
             android:id="@+id/imgHotel"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/iconn"
+            android:src="@drawable/purwakarta_splash"
             android:scaleType="centerCrop"
             android:layout_marginEnd="12dp"
              />
@@ -30,7 +32,7 @@
         <!-- RelativeLayout untuk konten teks dan rating -->
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="10dp">
 
@@ -44,12 +46,22 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
 
+            <TextView
+                android:id="@+id/tvHotelAlamat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvHotelName"
+                android:layout_marginTop="4dp"
+                android:text="Alamat Hotel"
+                android:textSize="14sp"
+                android:textColor="@color/subTextColor" />
+
             <!-- Rating dan Bintang -->
             <LinearLayout
                 android:id="@+id/ratingLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvHotelName"
+                android:layout_below="@id/tvHotelAlamat"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
@@ -73,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="4/5"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/black" />
             </LinearLayout>
         </RelativeLayout>

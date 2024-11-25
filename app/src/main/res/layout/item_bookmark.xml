@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:cardCornerRadius="20dp"
-    android:cardElevation="10dp"
-    android:useCompatPadding="true">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp"
+    app:useCompatPadding="true">
 
     <!-- LinearLayout untuk kontainer utama -->
     <LinearLayout
@@ -21,7 +22,7 @@
             android:id="@+id/imgBookmark"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/iconn" <!-- Ganti dengan gambar bookmark -->
+            android:src="@drawable/iconn"
             android:scaleType="centerCrop"
             android:layout_marginEnd="12dp" />
 

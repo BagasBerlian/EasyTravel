@@ -18,7 +18,9 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteY="-4dp" />
 
+    <!-- Profile Card -->
     <LinearLayout
+        android:id="@+id/profileCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -37,9 +39,9 @@
             android:id="@+id/namaUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Leonardo"
             android:textColor="@color/blackText"
             android:textSize="16sp"
+            android:text="username"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +76,7 @@
             android:layout_height="35dp"
             android:src="@drawable/clock" />
 
+        <!-- Date text -->
         <TextView
             android:id="@+id/teksTanggal"
             android:layout_width="wrap_content"
@@ -146,7 +149,9 @@
             android:textColor="@color/blackText"
             android:textSize="24sp" />
 
+        <!-- Hotel Card -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/hotelcard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -175,6 +180,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Hotel"
+                    android:textColor="@color/blackText"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -186,7 +192,9 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Wisata Card -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/wisatacard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -215,6 +223,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Wisata"
+                    android:textColor="@color/blackText"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -226,7 +235,9 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Kuliner Card -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/kulinercard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -255,6 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Kuliner"
+                    android:textColor="@color/blackText"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

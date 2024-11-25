@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,35 +18,25 @@
         android:theme="@style/Theme.EasyTravel"
         tools:targetApi="31">
         <activity
-            android:name=".CommentHistoryActivity"
-            android:exported="false" />
+            android:name=".CommentHistoryActivity" />
         <activity
-            android:name=".ListBookmarkActivity"
-            android:exported="false" />
+            android:name=".ListBookmarkActivity" />
         <activity
-            android:name=".DaftarKulinerActivity"
-            android:exported="false" />
+            android:name=".DaftarKulinerActivity" />
         <activity
-            android:name=".DaftarWisataActivity"
-            android:exported="false" />
+            android:name=".DaftarWisataActivity" />
         <activity
-            android:name=".ChangePasswordActivity"
-            android:exported="false" />
+            android:name=".ChangePasswordActivity" />
         <activity
-            android:name=".EditProfileActivity"
-            android:exported="false" />
+            android:name=".EditProfileActivity" />
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
+            android:name=".ProfileActivity" />
         <activity
-            android:name=".DaftarHotelActivity"
-            android:exported="false" />
+            android:name=".DaftarHotelActivity" />
         <activity
-            android:name=".DashboardActivity"
-            android:exported="false" />
+            android:name=".DashboardActivity" />
         <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
+            android:name=".RegisterActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

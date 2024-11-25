@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:cardCornerRadius="30dp"
-    android:cardElevation="15dp"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="15dp"
+    android:backgroundTint="@color/white"
     android:radius="20dp"
-    android:useCompatPadding="true">
+    app:useCompatPadding="true">
 
     <!-- LinearLayout untuk kontainer utama -->
     <LinearLayout
@@ -43,12 +45,22 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
 
+            <TextView
+                android:id="@+id/tvWisataKategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvWisataName"
+                android:layout_marginTop="4dp"
+                android:text="Alamat Hotel"
+                android:textSize="14sp"
+                android:textColor="@color/subTextColor" />
+
             <!-- Rating dan Bintang -->
             <LinearLayout
                 android:id="@+id/ratingLayoutWisata"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvWisataName"
+                android:layout_below="@id/tvWisataKategori"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
@@ -72,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="4/5"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/black" />
             </LinearLayout>
         </RelativeLayout>
