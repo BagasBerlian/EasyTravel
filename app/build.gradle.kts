@@ -39,6 +39,7 @@ android {
         implementation(libs.gson)
         implementation(libs.core)
         implementation(libs.glide)
+        implementation(libs.location)
 
         implementation(libs.androidnetworking)
 
