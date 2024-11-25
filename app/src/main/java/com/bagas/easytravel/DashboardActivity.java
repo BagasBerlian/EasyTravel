@@ -64,28 +64,25 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), DaftarHotelActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }
         });
 
-//        wisataCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(getApplicationContext(), DaftarWisataActivity.class)
-//                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-//            }
-//        });
-//
-//        kulinerCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(getApplicationContext(), DaftarKulinerActivity.class)
-//                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-//            }
-//        });
+        wisataCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), DaftarWisataActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            }
+        });
+
+        kulinerCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), DaftarKulinerActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            }
+        });
     }
 
     private void initDate() {
@@ -101,8 +98,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
