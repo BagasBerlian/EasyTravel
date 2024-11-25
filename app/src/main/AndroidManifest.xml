@@ -18,6 +18,8 @@
         android:theme="@style/Theme.EasyTravel"
         tools:targetApi="31">
         <activity
+            android:name=".CommentHistoryActivity" />
+        <activity
             android:name=".ListBookmarkActivity" />
         <activity
             android:name=".DaftarKulinerActivity" />
