@@ -1,5 +1,7 @@
 package com.bagas.easytravel;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -17,12 +19,16 @@ import com.bumptech.glide.Glide;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    TextView tvNama, tvAlamat, tvJamBuka, tvDistance;
+    TextView tvNama, tvAlamat, tvJamBuka, tvDistance, tvDeskripsi;
+    TextView txtAboutPlace;
     ImageView tvGambar, iconMap;
-    LinearLayout linearRating;
+    ImageButton buttonMaps;
+
+    double latitude;
+    double longitude;
 
     float distance;
-    String nama, alamat, jamBuka, gambar;
+    String nama, deskripsi, alamat, jamBuka, gambar,tampilanDistance,formattedDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,26 +38,36 @@ public class DetailsActivity extends AppCompatActivity {
         initBackBtn();
 
         tvNama = findViewById(R.id.NamaTempat);
+        tvDeskripsi = findViewById(R.id.DeskripsiTempat);
         tvAlamat = findViewById(R.id.AlamatTempat);
         tvJamBuka = findViewById(R.id.jamBuka);
         tvGambar = findViewById(R.id.bgTempat);
         tvDistance = findViewById(R.id.distance);
         iconMap = findViewById(R.id.iconMap);
-        linearRating = findViewById(R.id.linearRating);
+        buttonMaps = findViewById(R.id.ButtonMaps);
+        txtAboutPlace = findViewById(R.id.txtAboutPlace);
 
-        gambar = getIntent().getStringExtra("gambar");
         nama = getIntent().getStringExtra("nama");
-
-        distance = getIntent().getFloatExtra("koordinat", 0);
-        String formattedDistance = String.format("%.2f", distance);
-        String tampilanDistance = formattedDistance + " KM dari tempat anda";
 
         if (getIntent().getStringExtra("alamat") != null) {
             alamat = getIntent().getStringExtra("alamat");
         } else {
-            linearRating.setVisibility(View.GONE);
+            // Kondisi khusus Wisata
             iconMap.setVisibility(View.GONE);
             alamat = getIntent().getStringExtra("kategori");
+        }
+
+        gambar = getIntent().getStringExtra("gambar");
+
+        distance = getIntent().getFloatExtra("koordinat", 0);
+        formattedDistance = String.format("%.2f", distance);
+        tampilanDistance = formattedDistance + " KM dari tempat anda";
+
+        if (getIntent().getStringExtra("deskripsi") != null) {
+            deskripsi = getIntent().getStringExtra("deskripsi");
+        } else {
+            // TextView About Place Hotel hilang
+            txtAboutPlace.setVisibility(View.GONE);
         }
 
         if (getIntent().getStringExtra("jam-buka") != null) {
@@ -59,7 +75,14 @@ public class DetailsActivity extends AppCompatActivity {
         } else {
             tvJamBuka.setVisibility(View.GONE);
         }
+
+
+        latitude = getIntent().getDoubleExtra("latitude", 0.0);
+        longitude = getIntent().getDoubleExtra("longitude", 0.0);
+        handleMaps();
+
         tvNama.setText(nama);
+        tvDeskripsi.setText(deskripsi);
         tvAlamat.setText(alamat);
         tvDistance.setText(tampilanDistance);
         tvJamBuka.setText(jamBuka);
@@ -73,6 +96,22 @@ public class DetailsActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    private void handleMaps() {
+        buttonMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String geoUri = "geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                intent.setPackage("com.google.android.apps.maps");
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri)));
+                }
+            }
         });
     }
 

@@ -2,20 +2,30 @@ package com.bagas.easytravel.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.bagas.easytravel.API.Api;
 import com.bagas.easytravel.DetailsActivity;
 import com.bagas.easytravel.Model.ModelKuliner;
 import com.bagas.easytravel.Model.ModelWisata;
 import com.bagas.easytravel.R;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -65,13 +75,45 @@ public class KulinerAdapter extends RecyclerView.Adapter<KulinerAdapter.KulinerV
 
         holder.itemView.setOnClickListener(view -> {
             Context context = holder.itemView.getContext();
+            String kulinerId = kuliner.getId();
+            Float distance = kuliner.getDistance();
+            Double latitude = kuliner.getLatitude();
+            Double longitude = kuliner.getLongitude();
             Intent intent = new Intent(context, DetailsActivity.class);
-            intent.putExtra("nama", kuliner.getNama());
-            intent.putExtra("alamat", kuliner.getAlamat());
-            intent.putExtra("jam-buka", kuliner.getJamBuka());
-            intent.putExtra("koordinat", kuliner.getDistance());
-            intent.putExtra("gambar", kuliner.getGambar());
-            context.startActivity(intent);
+
+            AndroidNetworking.get(Api.DetailKuliner + kulinerId)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                String nama = response.getString("nama");
+                                String alamat = response.getString("alamat");
+                                String jamBuka = response.getString("jam_buka_tutup");
+                                String deskripsi = response.optString("deskripsi", "Deskripsi tidak ada");
+                                String gambar = response.getString("gambar_url");
+
+                                intent.putExtra("nama", nama);
+                                intent.putExtra("alamat", alamat);
+                                intent.putExtra("jam-buka", jamBuka);
+                                intent.putExtra("deskripsi", deskripsi);
+                                intent.putExtra("gambar", gambar);
+                                intent.putExtra("koordinat", distance);
+                                intent.putExtra("latitude", latitude);
+                                intent.putExtra("longitude", longitude);
+
+                                context.startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(context, "Error parsing detail data!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Toast.makeText(context, "Error fetching detail data!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 

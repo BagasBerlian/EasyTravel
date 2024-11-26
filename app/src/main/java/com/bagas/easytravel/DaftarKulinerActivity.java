@@ -187,8 +187,9 @@ public class DaftarKulinerActivity extends AppCompatActivity {
                                 );
                                 Log.d("Jarak Dihitung", "Jarak: " + results[0] + " meter");
                                 float hasil = (float) (results[0] / 100000.0);
-                                kuliner.setDistance(hasil);
 
+                                kuliner.setDistance(hasil);
+                                kuliner.setId(kulinerObj.getString("id"));
                                 kuliner.setAlamat(kulinerObj.getString("alamat"));
                                 kuliner.setJamBuka(kulinerObj.optString("jam_buka_tutup", "Tidak tersedia"));
                                 kuliner.setNama(kulinerObj.optString("nama", "Tidak diketahui"));

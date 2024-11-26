@@ -3,6 +3,7 @@ package com.bagas.easytravel.Model;
 import java.io.Serializable;
 
 public class ModelKuliner implements Serializable {
+    private String id;
     private String nama;
     private String gambar;
     private String alamat;
@@ -65,5 +66,13 @@ public class ModelKuliner implements Serializable {
 
     public void setJamBuka(String jamBuka) {
         this.jamBuka = jamBuka;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

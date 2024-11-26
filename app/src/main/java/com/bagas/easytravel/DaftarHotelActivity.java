@@ -161,6 +161,7 @@ public class DaftarHotelActivity extends AppCompatActivity {
                             for (int i = 0; i < hotels.length(); i++) {
                                 JSONObject hotelObj = hotels.getJSONObject(i);
                                 ModelHotel hotel = new ModelHotel();
+
                                 hotel.setNama(hotelObj.getString("nama"));
                                 hotel.setAlamat(hotelObj.getString("alamat"));
 
@@ -171,8 +172,8 @@ public class DaftarHotelActivity extends AppCompatActivity {
                                         hotel.setLatitude(Double.parseDouble(koor[0].trim()));
                                         hotel.setLongitude(Double.parseDouble(koor[1].trim()));
                                     } catch (NumberFormatException e) {
-                                        hotel.setLatitude(-6.537805);
-                                        hotel.setLongitude(107.440644);
+                                        hotel.setLatitude(0.0);
+                                        hotel.setLongitude(0.0);
                                     }
                                 } else {
                                     hotel.setLatitude(-6.5378051);
@@ -181,16 +182,15 @@ public class DaftarHotelActivity extends AppCompatActivity {
 
                                 float[] results = new float[1];
                                 Location.distanceBetween(
-                                        userLatitude,
-                                        userLongitude,
                                         hotel.getLatitude(),
                                         hotel.getLongitude(),
+                                        userLatitude,
+                                        userLongitude,
                                         results
                                 );
-                                Log.d("Jarak Dihitung", "Jarak: " + results[0] + " meter");
-                                float hasil = (float) (results[0] / 100000.0);
-                                hotel.setDistance(hasil);
+                                float hasil = (float) (results[0] / 1000.0);
 
+                                hotel.setDistance(hasil);
                                 hotel.setGambar(hotelObj.getString("gambar_url"));
                                 hotelList.add(hotel);
                             }
