@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Add Comment"
+        android:text="Detail"
         android:elevation="10dp"
         android:textSize="24sp"
         android:textColor="@color/white"
@@ -59,6 +59,7 @@
         app:tint="@color/white" />
 
     <ImageView
+        android:id="@+id/bgTempat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerInside"
@@ -83,12 +84,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:gravity="top"
             >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
 <!--                Nama Tempat-->
@@ -105,11 +107,14 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:gravity="top|start"
                     android:paddingVertical="5dp"
+                    android:layout_marginTop="10dp"
                     >
 
                     <ImageView
+                        android:id="@+id/iconMap"
+                        android:visibility="visible"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/location"
@@ -128,6 +133,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linearRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
@@ -150,7 +156,29 @@
                         android:textStyle="bold"
                         />
 
+                    <!-- Distance -->
+                    <TextView
+                        android:id="@+id/distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/blackText"
+                        android:textSize="18sp"
+                        android:layout_marginStart="12dp"
+                        android:maxLines="1"
+                        />
+
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/jamBuka"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jam Buka"
+                    android:textSize="18sp"
+                    android:textStyle="italic"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/subTextColor"/>
 
             </LinearLayout>
 

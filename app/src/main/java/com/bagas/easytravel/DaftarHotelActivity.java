@@ -1,7 +1,10 @@
 package com.bagas.easytravel;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,16 +32,27 @@ import org.json.JSONObject;
 import com.bagas.easytravel.API.Api;
 import com.bagas.easytravel.Adapter.HotelAdapter;
 import com.bagas.easytravel.Model.ModelHotel;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DaftarHotelActivity extends AppCompatActivity {
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
     ProgressDialog progressDialog;
     RecyclerView recyclerViewHotel;
     HotelAdapter hotelAdapter;
     List<ModelHotel> hotelList;
+
+    FusedLocationProviderClient fusedLocationClient;
+    double userLatitude;
+    double userLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +73,68 @@ public class DaftarHotelActivity extends AppCompatActivity {
         recyclerViewHotel.setAdapter(hotelAdapter);
 
         AndroidNetworking.initialize(getApplicationContext());
-        getHotel();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getUserLocation();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void getUserLocation() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        userLatitude = location.getLatitude();
+                        userLongitude = location.getLongitude();
+                        getHotel();
+                    } else {
+                        requestLocationUpdates();
+                    }
+                })
+                .addOnFailureListener(this, e -> {
+                    Toast.makeText(this, "Error mendapatkan lokasi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void requestLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10000)
+                .setFastestInterval(5000);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    Toast.makeText(DaftarHotelActivity.this, "Gagal mendapatkan lokasi real-time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Location location = locationResult.getLastLocation();
+                if (location != null) {
+                    userLatitude = location.getLatitude();
+                    userLongitude = location.getLongitude();
+                    fusedLocationClient.removeLocationUpdates(this);
+                    getHotel();
+                }
+            }
+        }, getMainLooper());
     }
 
     private void initBtnBack() {
@@ -91,13 +162,34 @@ public class DaftarHotelActivity extends AppCompatActivity {
                                 JSONObject hotelObj = hotels.getJSONObject(i);
                                 ModelHotel hotel = new ModelHotel();
                                 hotel.setNama(hotelObj.getString("nama"));
+                                hotel.setAlamat(hotelObj.getString("alamat"));
 
-                                String alamat = hotelObj.getString("alamat");
-                                String[] alamatParts = alamat.split(", ");
-                                String jalan = alamatParts[0];
-                                String kecamatan = alamatParts[1];
-                                String tampilanAlamat = jalan + ", " + kecamatan;
-                                hotel.setAlamat(tampilanAlamat);
+                                String koordinat = hotelObj.optString("kordinat", "");
+                                if (koordinat.contains(",")) {
+                                    String[] koor = koordinat.split(",");
+                                    try {
+                                        hotel.setLatitude(Double.parseDouble(koor[0].trim()));
+                                        hotel.setLongitude(Double.parseDouble(koor[1].trim()));
+                                    } catch (NumberFormatException e) {
+                                        hotel.setLatitude(-6.537805);
+                                        hotel.setLongitude(107.440644);
+                                    }
+                                } else {
+                                    hotel.setLatitude(-6.5378051);
+                                    hotel.setLongitude(107.440644);
+                                }
+
+                                float[] results = new float[1];
+                                Location.distanceBetween(
+                                        userLatitude,
+                                        userLongitude,
+                                        hotel.getLatitude(),
+                                        hotel.getLongitude(),
+                                        results
+                                );
+                                Log.d("Jarak Dihitung", "Jarak: " + results[0] + " meter");
+                                float hasil = (float) (results[0] / 100000.0);
+                                hotel.setDistance(hasil);
 
                                 hotel.setGambar(hotelObj.getString("gambar_url"));
                                 hotelList.add(hotel);
@@ -116,4 +208,17 @@ public class DaftarHotelActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getUserLocation();
+            } else {
+                Toast.makeText(this, "Izin lokasi diperlukan untuk melanjutkan", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
+

@@ -82,7 +82,7 @@
         android:ems="10"
         android:hint="@string/hintKonfPass"
         android:inputType="textPassword"
-        android:textColor="@color/subTextColor"
+        android:textColor="@color/blackText"
         android:textColorHint="@color/subTextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

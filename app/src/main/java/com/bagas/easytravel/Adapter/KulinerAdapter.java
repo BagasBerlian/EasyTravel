@@ -1,5 +1,7 @@
 package com.bagas.easytravel.Adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bagas.easytravel.DetailsActivity;
 import com.bagas.easytravel.Model.ModelKuliner;
 import com.bagas.easytravel.Model.ModelWisata;
 import com.bagas.easytravel.R;
@@ -59,6 +62,17 @@ public class KulinerAdapter extends RecyclerView.Adapter<KulinerAdapter.KulinerV
                     .load(R.drawable.iconn)
                     .into(holder.tvKulinerGambar);
         }
+
+        holder.itemView.setOnClickListener(view -> {
+            Context context = holder.itemView.getContext();
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("nama", kuliner.getNama());
+            intent.putExtra("alamat", kuliner.getAlamat());
+            intent.putExtra("jam-buka", kuliner.getJamBuka());
+            intent.putExtra("koordinat", kuliner.getDistance());
+            intent.putExtra("gambar", kuliner.getGambar());
+            context.startActivity(intent);
+        });
     }
 
     @Override

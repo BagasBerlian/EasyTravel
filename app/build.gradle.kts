@@ -49,3 +49,6 @@ android {
         androidTestImplementation(libs.ext.junit)
     }
 }
+dependencies {
+    implementation(libs.firebase.firestore)
+}

@@ -5,6 +5,8 @@ import java.io.Serializable;
 public class ModelKuliner implements Serializable {
     private String nama;
     private String gambar;
+    private String alamat;
+    private String jamBuka;
     private double latitude;
     private double longitude;
     private float distance;
@@ -47,5 +49,21 @@ public class ModelKuliner implements Serializable {
 
     public void setDistance(float distance) {
         this.distance = distance;
+    }
+
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public String getJamBuka() {
+        return jamBuka;
+    }
+
+    public void setJamBuka(String jamBuka) {
+        this.jamBuka = jamBuka;
     }
 }

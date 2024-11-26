@@ -1,7 +1,10 @@
 package com.bagas.easytravel;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,6 +29,11 @@ import com.bagas.easytravel.Adapter.HotelAdapter;
 import com.bagas.easytravel.Adapter.WisataAdapter;
 import com.bagas.easytravel.Model.ModelHotel;
 import com.bagas.easytravel.Model.ModelWisata;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +76,7 @@ public class DaftarWisataActivity extends AppCompatActivity {
             return insets;
         });
     }
+
 
     private void initBckBtn() {
         ImageView backButton = findViewById(R.id.btnBackWisata);
