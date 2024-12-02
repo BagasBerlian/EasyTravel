@@ -74,6 +74,7 @@ public class DaftarHotelActivity extends AppCompatActivity {
 
         AndroidNetworking.initialize(getApplicationContext());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getHotel();
         getUserLocation();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -93,8 +94,8 @@ public class DaftarHotelActivity extends AppCompatActivity {
                     if (location != null) {
                         userLatitude = location.getLatitude();
                         userLongitude = location.getLongitude();
-                        getHotel();
                     } else {
+                        Toast.makeText(this, "Nyalakan GPS Anda", Toast.LENGTH_SHORT).show();
                         requestLocationUpdates();
                     }
                 })
@@ -188,7 +189,7 @@ public class DaftarHotelActivity extends AppCompatActivity {
                                         userLongitude,
                                         results
                                 );
-                                float hasil = (float) (results[0] / 1000.0);
+                                float hasil = (float) (results[0] / 100000.0);
 
                                 hotel.setDistance(hasil);
                                 hotel.setGambar(hotelObj.getString("gambar_url"));

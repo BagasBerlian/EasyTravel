@@ -75,6 +75,7 @@ public class DaftarWisataActivity extends AppCompatActivity {
 
         AndroidNetworking.initialize(getApplicationContext());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getWisata();
         getUserLocation();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -94,8 +95,8 @@ public class DaftarWisataActivity extends AppCompatActivity {
                     if (location != null) {
                         userLatitude = location.getLatitude();
                         userLongitude = location.getLongitude();
-                        getWisata();
                     } else {
+                        Toast.makeText(this, "Nyalakan GPS Anda", Toast.LENGTH_SHORT).show();
                         requestLocationUpdates();
                     }
                 })

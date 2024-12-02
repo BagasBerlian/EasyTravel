@@ -85,6 +85,7 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataView
                                 Log.d("Jarak Dihitung", "Jarak: " + results[0] + " meter");
                                 float hasil = (float) (results[0] / 100000.0);
 
+                                intent.putExtra("type", "wisata");
                                 intent.putExtra("nama", nama);
                                 intent.putExtra("deskripsi", deskripsi);
                                 intent.putExtra("gambar", gambar);

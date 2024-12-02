@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,12 +25,15 @@ public class DetailsActivity extends AppCompatActivity {
     TextView txtAboutPlace;
     ImageView tvGambar, iconMap;
     ImageButton buttonMaps;
+    Button commentBtn;
 
     double latitude;
     double longitude;
 
     float distance;
-    String nama, deskripsi, alamat, jamBuka, gambar,tampilanDistance,formattedDistance;
+    String type, nama, deskripsi, alamat,
+            jamBuka, gambar,tampilanDistance,
+            formattedDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,9 @@ public class DetailsActivity extends AppCompatActivity {
         iconMap = findViewById(R.id.iconMap);
         buttonMaps = findViewById(R.id.ButtonMaps);
         txtAboutPlace = findViewById(R.id.txtAboutPlace);
+
+        type = getIntent().getStringExtra("type");
+        initCommentBtn(type);
 
         nama = getIntent().getStringExtra("nama");
 
@@ -66,7 +74,6 @@ public class DetailsActivity extends AppCompatActivity {
         if (getIntent().getStringExtra("deskripsi") != null) {
             deskripsi = getIntent().getStringExtra("deskripsi");
         } else {
-            // TextView About Place Hotel hilang
             txtAboutPlace.setVisibility(View.GONE);
         }
 
@@ -96,6 +103,19 @@ public class DetailsActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    private void initCommentBtn(String type) {
+        commentBtn = findViewById(R.id.commentButton);
+        commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AddCommentActivity.class);
+                intent.putExtra("placeId", nama);
+                intent.putExtra("type", type);
+                startActivity(intent);
+            }
         });
     }
 

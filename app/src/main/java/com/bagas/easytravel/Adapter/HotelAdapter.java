@@ -57,6 +57,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
         holder.itemView.setOnClickListener(view -> {
             Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("type", "hotel");
             intent.putExtra("nama", hotel.getNama());
             intent.putExtra("alamat", alamat);
             intent.putExtra("gambar", hotel.getGambar());

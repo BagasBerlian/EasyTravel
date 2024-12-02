@@ -105,6 +105,7 @@ public class DaftarKulinerActivity extends AppCompatActivity {
                         userLongitude = location.getLongitude();
                         getKuliner();
                     } else {
+                        Toast.makeText(this, "Nyalakan GPS Anda", Toast.LENGTH_SHORT).show();
                         requestLocationUpdates();
                     }
                 })

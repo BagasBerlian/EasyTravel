@@ -260,7 +260,7 @@
 
 <!--        Buka Halaman List Komentar-->
         <Button
-            android:id="@+id/GoToCommentButton"
+            android:id="@+id/commentButton"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginHorizontal="10dp"

@@ -93,6 +93,7 @@ public class KulinerAdapter extends RecyclerView.Adapter<KulinerAdapter.KulinerV
                                 String deskripsi = response.optString("deskripsi", "Deskripsi tidak ada");
                                 String gambar = response.getString("gambar_url");
 
+                                intent.putExtra("type", "kuliner");
                                 intent.putExtra("nama", nama);
                                 intent.putExtra("alamat", alamat);
                                 intent.putExtra("jam-buka", jamBuka);
