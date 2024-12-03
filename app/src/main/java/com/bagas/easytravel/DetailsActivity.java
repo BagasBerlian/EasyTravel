@@ -3,6 +3,7 @@ package com.bagas.easytravel;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -16,16 +17,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bagas.easytravel.Adapter.CommentAdapter;
+import com.bagas.easytravel.Model.ModelComment;
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
+    FirebaseUser user;
+
     TextView tvNama, tvAlamat, tvJamBuka, tvDistance, tvDeskripsi;
+    TextView txtRatingValue;
     TextView txtAboutPlace;
+    TextView txtMoreComment;
     ImageView tvGambar, iconMap;
     ImageButton buttonMaps;
     Button commentBtn;
+
+    float totalRating;
+    int commentCount;
 
     double latitude;
     double longitude;
@@ -35,12 +59,19 @@ public class DetailsActivity extends AppCompatActivity {
             jamBuka, gambar,tampilanDistance,
             formattedDistance;
 
+    RecyclerView rvComment;
+    CommentAdapter commentAdapter;
+    List<ModelComment> commentList;
+
+    String placeId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_details);
         initBackBtn();
+        initMoreCommentBtn();
 
         tvNama = findViewById(R.id.NamaTempat);
         tvDeskripsi = findViewById(R.id.DeskripsiTempat);
@@ -51,6 +82,18 @@ public class DetailsActivity extends AppCompatActivity {
         iconMap = findViewById(R.id.iconMap);
         buttonMaps = findViewById(R.id.ButtonMaps);
         txtAboutPlace = findViewById(R.id.txtAboutPlace);
+        txtRatingValue = findViewById(R.id.RatingValue);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            startActivity(new Intent(DetailsActivity.this, MainActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        }
+
 
         type = getIntent().getStringExtra("type");
         initCommentBtn(type);
@@ -99,11 +142,85 @@ public class DetailsActivity extends AppCompatActivity {
                 .error(R.drawable.grama_tirta_jatiluhur)
                 .into(tvGambar);
 
+        initComment();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent().getBooleanExtra("isNewCommentAdded", false)) {
+            loadComment(getIntent().getStringExtra("placeId"));
+        }
+    }
+
+
+    private void initComment() {
+        placeId = nama;
+
+        rvComment = findViewById(R.id.rvComment);
+        rvComment.setLayoutManager(new LinearLayoutManager(this));
+        commentList = new ArrayList<>();
+        commentAdapter = new CommentAdapter(commentList, user.toString());
+        rvComment.setAdapter(commentAdapter);
+
+        loadComment(placeId);
+    }
+
+    private void loadComment(String placeId) {
+        db.collection("comments")
+                .whereEqualTo("placeId", placeId)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(3)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        commentList.clear();
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        String currentUserId = user.getUid();
+                        totalRating = 0;
+                        commentCount = 0;
+
+                        for (int i = 0; i < documents.size(); i++) {
+                            ModelComment comment = documents.get(i).toObject(ModelComment.class)    ;
+                            String userId = comment.getUserId();
+                            totalRating += comment.getRating();
+                            commentCount++;
+
+                            db.collection("users")
+                                    .whereEqualTo("uuid", userId)
+                                    .get()
+                                    .addOnSuccessListener(userQuery -> {
+                                        if (!userQuery.isEmpty()) {
+                                            String username = userQuery.getDocuments().get(0).getString("nama");
+                                            if (userId.equals(currentUserId)) {
+                                                username = "saya";
+                                            }
+                                            comment.setUsername(username);
+                                            commentList.add(comment);
+                                            if (commentList.size() == documents.size()) {
+                                                Float averageRating = totalRating / commentCount;
+                                                txtRatingValue.setText(String.format("%.1f", averageRating));
+                                                commentAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.d("load_comment", "Gagal mengambil data user", e);
+                                    });
+                        }
+                    } else {
+                        Log.d("load_comment", "Tidak ada dokumen yang ditemukan");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("load_comment", "Gagal load comment", e);
+                });
     }
 
     private void initCommentBtn(String type) {
@@ -131,6 +248,16 @@ public class DetailsActivity extends AppCompatActivity {
                 } else {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri)));
                 }
+            }
+        });
+    }
+
+    private void initMoreCommentBtn() {
+        txtMoreComment = findViewById(R.id.BukaKomentar);
+        txtMoreComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), CommentActivity.class));
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.bagas.easytravel;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,7 +74,7 @@ public class AddCommentActivity extends AppCompatActivity {
         float rating = ratingBar.getRating();
 
         if (comment.isEmpty() || rating == 0) {
-            Toast.makeText(this, "Please enter a comment and rating", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Pastikan Komentar & Rating terisi", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -94,6 +95,11 @@ public class AddCommentActivity extends AppCompatActivity {
         db.collection("comments")
                 .add(commentData)
                 .addOnSuccessListener(documentReference -> {
+                    Intent intent = new Intent(AddCommentActivity.this, DetailsActivity.class);
+                    intent.putExtra("placeId", placeId);
+                    intent.putExtra("isNewCommentAdded", true);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     Toast.makeText(AddCommentActivity.this, "Komentar berhasil dikirim", Toast.LENGTH_SHORT).show();
                     finish();
                 })
