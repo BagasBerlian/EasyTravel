@@ -35,7 +35,6 @@ android {
         implementation(libs.material)
         implementation(libs.activity)
         implementation(libs.constraintlayout)
-        implementation(libs.firebase.auth)
         implementation(libs.gson)
         implementation(libs.core)
         implementation(libs.glide)
@@ -50,5 +49,6 @@ android {
     }
 }
 dependencies {
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
 }

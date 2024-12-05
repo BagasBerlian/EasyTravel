@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bagas.easytravel.Adapter.CommentAdapter;
+import com.bagas.easytravel.Model.ModelBookmark;
 import com.bagas.easytravel.Model.ModelComment;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +47,7 @@ public class DetailsActivity extends AppCompatActivity {
     TextView txtAboutPlace;
     TextView txtMoreComment;
     ImageView tvGambar, iconMap;
-    ImageButton buttonMaps;
+    ImageButton buttonMaps, buttonBookmark;
     Button commentBtn;
 
     float totalRating;
@@ -64,7 +65,8 @@ public class DetailsActivity extends AppCompatActivity {
     CommentAdapter commentAdapter;
     List<ModelComment> commentList;
 
-    String placeId;
+    String placeId, getUserId;
+    Integer a = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,17 +86,18 @@ public class DetailsActivity extends AppCompatActivity {
         buttonMaps = findViewById(R.id.ButtonMaps);
         txtAboutPlace = findViewById(R.id.txtAboutPlace);
         txtRatingValue = findViewById(R.id.RatingValue);
+        buttonBookmark = findViewById(R.id.BookmarkButton);
 
-        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        getUserId = user.getUid();
 
         if (user == null) {
             startActivity(new Intent(DetailsActivity.this, MainActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
         }
-
 
         type = getIntent().getStringExtra("type");
         initCommentBtn(type);
@@ -130,7 +133,6 @@ public class DetailsActivity extends AppCompatActivity {
             tvJamBuka.setVisibility(View.GONE);
         }
 
-
         latitude = getIntent().getDoubleExtra("latitude", 0.0);
         longitude = getIntent().getDoubleExtra("longitude", 0.0);
         handleMaps();
@@ -147,12 +149,38 @@ public class DetailsActivity extends AppCompatActivity {
                 .into(tvGambar);
 
         initComment();
+        checkBookmark();
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void checkBookmark() {
+        db.collection("bookmarks")
+                .whereEqualTo("placeId", placeId)
+                .whereEqualTo("userId", getUserId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        Boolean isBookmarked = task.getResult().getDocuments().get(0).getBoolean("is_bookmark");
+                        if (isBookmarked != null && isBookmarked) {
+                            buttonBookmark.setImageResource(R.drawable.bookmark_solid);
+                        } else {
+                            buttonBookmark.setImageResource(R.drawable.bookmark);
+                        }
+                    } else {
+                        buttonBookmark.setImageResource(R.drawable.bookmark); // default
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("checkBookmark", "Error checking bookmark", e);
+                });
+
+        toogleBookmark();
     }
 
     @Override
@@ -230,6 +258,55 @@ public class DetailsActivity extends AppCompatActivity {
                         Log.d("load_comment", "Tidak ada dokumen yang ditemukan");
                     }
                 });
+    }
+
+    private void toogleBookmark() {
+        buttonBookmark.setOnClickListener(view -> {
+            db.collection("bookmarks")
+                    .whereEqualTo("placeId", placeId)
+                    .whereEqualTo("userId", getUserId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            // Jika dokumen ditemukan, toggle nilai `is_bookmark`
+                            String documentId = task.getResult().getDocuments().get(0).getId();
+                            Boolean isBookmarked = task.getResult().getDocuments().get(0).getBoolean("is_bookmark");
+                            boolean newStatus = !(isBookmarked != null && isBookmarked);
+
+                            // Update Firestore
+                            db.collection("bookmarks").document(documentId)
+                                    .update("is_bookmark", newStatus)
+                                    .addOnSuccessListener(aVoid -> {
+                                        if (newStatus) {
+                                            buttonBookmark.setImageResource(R.drawable.bookmark_solid);
+                                            Toast.makeText(DetailsActivity.this, "Bookmark ditambahkan", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            buttonBookmark.setImageResource(R.drawable.bookmark);
+                                            Toast.makeText(DetailsActivity.this, "Bookmark dihapus", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("buttonBookmark", "Gagal memperbarui bookmark", e);
+                                    });
+
+                        } else {
+                            // Jika dokumen tidak ditemukan, tambahkan dokumen baru dengan `is_bookmark = true`
+                            ModelBookmark newBookmark = new ModelBookmark(getUserId, placeId, true);
+                            db.collection("bookmarks").add(newBookmark)
+                                    .addOnSuccessListener(documentReference -> {
+                                        buttonBookmark.setImageResource(R.drawable.bookmark_solid);
+                                        Toast.makeText(DetailsActivity.this, "Bookmark ditambahkan", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("buttonBookmark", "Gagal menambahkan bookmark", e);
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("buttonBookmark", "Error checking bookmark", e);
+                    });
+        });
+
     }
 
     private void initCommentBtn(String type) {
