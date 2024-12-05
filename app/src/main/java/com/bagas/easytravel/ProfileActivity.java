@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    CardView logoutBtn;
+    CardView logoutBtn, bookmarkButton;
     ImageView backButton;
     TextView namaUser, emailUser;
 
@@ -34,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
         initBack();
+        initBookmark();
         initLogoutBtn();
 
         mAuth = FirebaseAuth.getInstance();
@@ -44,6 +45,13 @@ public class ProfileActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    private void initBookmark() {
+        bookmarkButton = findViewById(R.id.BookmarkButton);
+        bookmarkButton.setOnClickListener(view -> {
+            startActivity(new Intent(ProfileActivity.this, ListBookmarkActivity.class));
         });
     }
 

@@ -52,6 +52,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     float totalRating;
     int commentCount;
+    float rataRating;
 
     double latitude;
     double longitude;
@@ -66,7 +67,6 @@ public class DetailsActivity extends AppCompatActivity {
     List<ModelComment> commentList;
 
     String placeId, getUserId;
-    Integer a = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,7 +291,7 @@ public class DetailsActivity extends AppCompatActivity {
 
                         } else {
                             // Jika dokumen tidak ditemukan, tambahkan dokumen baru dengan `is_bookmark = true`
-                            ModelBookmark newBookmark = new ModelBookmark(getUserId, placeId, true);
+                            ModelBookmark newBookmark = new ModelBookmark(getUserId, placeId, true, gambar);
                             db.collection("bookmarks").add(newBookmark)
                                     .addOnSuccessListener(documentReference -> {
                                         buttonBookmark.setImageResource(R.drawable.bookmark_solid);

@@ -3,6 +3,8 @@ package com.bagas.easytravel;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,41 +20,43 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListBookmarkActivity extends AppCompatActivity {
 
+    RecyclerView recyclerView;
+    BookmarkAdapter adapter;
+    List<ModelBookmark> bookmarkList;
+    Map<String, Float> averageRatings;
+
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    FirebaseUser user;
 
-    List<ModelBookmark> bookmarks;
-    BookmarkAdapter adapter;
+    ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_list_bookmark);
+        initBtnBack();
+
+        recyclerView = findViewById(R.id.recyclerViewBookmark);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        bookmarkList = new ArrayList<>();
+        averageRatings = new HashMap<>();
+        adapter = new BookmarkAdapter(this, bookmarkList, averageRatings);
+        recyclerView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-
-        if (user == null) {
-            startActivity(new Intent(ListBookmarkActivity.this, MainActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        }
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewBookmark);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        bookmarks = new ArrayList<>();
-        adapter = new BookmarkAdapter(bookmarks);
-        recyclerView.setAdapter(adapter);
 
         loadBookmarks();
 
@@ -63,23 +67,51 @@ public class ListBookmarkActivity extends AppCompatActivity {
         });
     }
 
+    private void initBtnBack() {
+        btnBack = findViewById(R.id.btnBackBookmark);
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
+    }
+
     private void loadBookmarks() {
-        String userId = user.getUid();
+        String currentUserId = mAuth.getCurrentUser().getUid();
 
         db.collection("bookmarks")
-                .whereEqualTo("userId", userId)
-                .whereEqualTo("bookmark", true)
+                .whereEqualTo("userId", currentUserId)
                 .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<ModelBookmark> bookmarks = new ArrayList<>();
-                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                        ModelBookmark bookmark = document.toObject(ModelBookmark.class);
-                        if (bookmark != null) {
-                            bookmarks.add(bookmark);
-                        }
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        ModelBookmark bookmark = doc.toObject(ModelBookmark.class);
+                        bookmarkList.add(bookmark);
+
+                        db.collection("comments")
+                                .whereEqualTo("placeId", bookmark.getPlaceId())
+                                .get()
+                                .addOnSuccessListener(ratingSnapshots -> {
+                                    float totalRating = 0;
+                                    int count = 0;
+
+                                    for (QueryDocumentSnapshot ratingDoc : ratingSnapshots) {
+                                        Number rating = ratingDoc.getDouble("rating");
+                                        if (rating != null) {
+                                            totalRating += rating.floatValue();
+                                            count++;
+                                        }
+                                    }
+
+                                    if (count > 0) {
+                                        averageRatings.put(bookmark.getPlaceId(), totalRating / count);
+                                    }
+
+                                    adapter.notifyDataSetChanged();
+                                });
                     }
-                    adapter.setBookmarks(bookmarks);
+
+                    adapter.notifyDataSetChanged();
                 })
-                .addOnFailureListener(e -> Log.e("ListBookmark", "Gagal memuat bookmarks.", e));
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load bookmarks", Toast.LENGTH_SHORT).show();
+                });
     }
 }
