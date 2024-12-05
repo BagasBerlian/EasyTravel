@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -99,6 +100,9 @@ public class DetailsActivity extends AppCompatActivity {
         initCommentBtn(type);
 
         nama = getIntent().getStringExtra("nama");
+        if (nama == null || nama.isEmpty()) {
+            nama = "Nama tidak ditemukan";
+        }
 
         if (getIntent().getStringExtra("alamat") != null) {
             alamat = getIntent().getStringExtra("alamat");
@@ -154,11 +158,15 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (getIntent().getBooleanExtra("isNewCommentAdded", false)) {
-            loadComment(getIntent().getStringExtra("placeId"));
-        }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK ) {
+            loadComment(placeId);
+        }
+    }
 
     private void initComment() {
         placeId = nama;
@@ -177,11 +185,15 @@ public class DetailsActivity extends AppCompatActivity {
                 .whereEqualTo("placeId", placeId)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(3)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
+                .addSnapshotListener((querySnapshot, e) -> {
+                    if (e != null) {
+                        Log.d("load_comment", "Error getting comments: ", e);
+                        return;
+                    }
+
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
                         commentList.clear();
-                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                         String currentUserId = user.getUid();
                         totalRating = 0;
                         commentCount = 0;
@@ -210,16 +222,13 @@ public class DetailsActivity extends AppCompatActivity {
                                             }
                                         }
                                     })
-                                    .addOnFailureListener(e -> {
-                                        Log.d("load_comment", "Gagal mengambil data user", e);
+                                    .addOnFailureListener(err -> {
+                                        Log.d("load_comment", "Gagal mengambil data user", err);
                                     });
                         }
                     } else {
                         Log.d("load_comment", "Tidak ada dokumen yang ditemukan");
                     }
-                })
-                .addOnFailureListener(e -> {
-                    Log.d("load_comment", "Gagal load comment", e);
                 });
     }
 
@@ -231,7 +240,7 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), AddCommentActivity.class);
                 intent.putExtra("placeId", nama);
                 intent.putExtra("type", type);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -257,7 +266,10 @@ public class DetailsActivity extends AppCompatActivity {
         txtMoreComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CommentActivity.class));
+                Intent intent = new Intent(getApplicationContext(), CommentActivity.class);
+                intent.putExtra("placeId", placeId);
+                intent.putExtra("type", type);
+                startActivity(intent);
             }
         });
     }

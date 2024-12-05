@@ -42,7 +42,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
         android:orientation="vertical"
-        android:paddingVertical="20dp"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent">
         <!-- RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -50,7 +50,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="20dp"
-            android:layout_marginTop="8dp" />
+            android:paddingVertical="10dp"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            />
     </LinearLayout>
 
     <Button

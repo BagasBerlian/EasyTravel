@@ -95,17 +95,13 @@ public class AddCommentActivity extends AppCompatActivity {
         db.collection("comments")
                 .add(commentData)
                 .addOnSuccessListener(documentReference -> {
-                    Intent intent = new Intent(AddCommentActivity.this, DetailsActivity.class);
-                    intent.putExtra("placeId", placeId);
-                    intent.putExtra("isNewCommentAdded", true);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
                     Toast.makeText(AddCommentActivity.this, "Komentar berhasil dikirim", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("FirestoreError", "Failed to add comment", e);
                     Toast.makeText(AddCommentActivity.this, "Gagal mengirim komentar", Toast.LENGTH_SHORT).show();
+                    Log.e("FirestoreError", "Failed to add comment", e);
                 });
     }
 
