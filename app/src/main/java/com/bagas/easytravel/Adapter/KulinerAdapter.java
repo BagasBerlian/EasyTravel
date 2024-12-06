@@ -19,8 +19,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bagas.easytravel.API.Api;
 import com.bagas.easytravel.DetailsActivity;
-import com.bagas.easytravel.Model.ModelKuliner;
-import com.bagas.easytravel.Model.ModelWisata;
+import com.bagas.easytravel.Model.ModelPlace;
 import com.bagas.easytravel.R;
 import com.bumptech.glide.Glide;
 
@@ -31,9 +30,9 @@ import java.util.List;
 
 public class KulinerAdapter extends RecyclerView.Adapter<KulinerAdapter.KulinerViewAdapter> {
 
-    private final List<ModelKuliner> kulinerList;
+    private final List<ModelPlace> kulinerList;
 
-    public KulinerAdapter(List<ModelKuliner> kulinerList) {
+    public KulinerAdapter(List<ModelPlace> kulinerList) {
         this.kulinerList = kulinerList;
     }
 
@@ -47,7 +46,7 @@ public class KulinerAdapter extends RecyclerView.Adapter<KulinerAdapter.KulinerV
 
     @Override
     public void onBindViewHolder(@NonNull KulinerAdapter.KulinerViewAdapter holder, int position) {
-        ModelKuliner kuliner = kulinerList.get(position);
+        ModelPlace kuliner = kulinerList.get(position);
 
         String kulinerName = kuliner.getNama();
         String[] words = kulinerName.split(" ");

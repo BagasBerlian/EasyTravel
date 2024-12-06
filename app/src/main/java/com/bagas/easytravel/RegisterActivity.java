@@ -19,9 +19,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,14 +72,26 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
-
                                 saveUserToFirestore(user, nama, email, password);
-
                                 startActivity(new Intent(getApplicationContext(), DashboardActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             } else {
-                                Log.w("auth_error", "Registrasi error lek", task.getException());
+                                // Handle Firebase Authentication errors
+                                String errorMessage = "Registrasi gagal. Silakan coba lagi.";
+                                try {
+                                    throw task.getException();
+                                } catch (FirebaseAuthWeakPasswordException e) {
+                                    errorMessage = "Password terlalu lemah, gunakan lebih dari 6 karakter.";
+                                } catch (FirebaseAuthInvalidCredentialsException e) {
+                                    errorMessage = "Email atau password tidak valid.";
+                                } catch (FirebaseAuthUserCollisionException e) {
+                                    errorMessage = "Email sudah terdaftar.";
+                                } catch (Exception e) {
+                                    Log.w("auth_error", "Registrasi error lek", e);
+                                }
+                                
+                                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -85,6 +102,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void saveUserToFirestore(FirebaseUser user, String nama, String email, String password) {
         if (user != null){
+
+            String hashedPassword = hashPassword(password);
+            
             Map<String, Object> userData = new HashMap<>();
             userData.put("uuid", user.getUid());
             userData.put("nama", nama);
@@ -102,6 +122,23 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                         Log.w("Firestore", "Error menyimpan data pengguna", e);
                     });
+        }
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("HashError", "Password hashing failed", e);
+            return null;
         }
     }
 

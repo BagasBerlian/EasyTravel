@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bagas.easytravel.DetailsActivity;
-import com.bagas.easytravel.Model.ModelHotel;
+import com.bagas.easytravel.Model.ModelPlace;
 import com.bagas.easytravel.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -22,9 +22,9 @@ import java.util.List;
 
 public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> {
 
-    private final List<ModelHotel> hotelList;
+    private final List<ModelPlace> hotelList;
 
-    public HotelAdapter(List<ModelHotel> hotelList) {
+    public HotelAdapter(List<ModelPlace> hotelList) {
         this.hotelList = hotelList;
     }
 
@@ -38,7 +38,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     @Override
     public void onBindViewHolder(@NonNull HotelAdapter.HotelViewHolder holder, int position) {
-        ModelHotel hotel = hotelList.get(position);
+        ModelPlace hotel = hotelList.get(position);
         holder.tvHotelName.setText(hotel.getNama());
 
         String alamat = hotel.getAlamat();

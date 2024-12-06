@@ -25,10 +25,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bagas.easytravel.API.Api;
-import com.bagas.easytravel.Adapter.HotelAdapter;
 import com.bagas.easytravel.Adapter.WisataAdapter;
-import com.bagas.easytravel.Model.ModelHotel;
-import com.bagas.easytravel.Model.ModelWisata;
+import com.bagas.easytravel.Model.ModelPlace;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -49,7 +47,7 @@ public class DaftarWisataActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     RecyclerView recyclerViewWisata;
     WisataAdapter wisataAdapter;
-    List<ModelWisata> wisataList;
+    List<ModelPlace> wisataList;
 
     FusedLocationProviderClient fusedLocationClient;
     double userLatitude;
@@ -163,7 +161,7 @@ public class DaftarWisataActivity extends AppCompatActivity {
                             JSONArray wisatas = response.getJSONArray("wisata");
                             for (int i = 0; i < wisatas.length(); i++) {
                                 JSONObject wisataObj = wisatas.getJSONObject(i);
-                                ModelWisata wisata = new ModelWisata();
+                                ModelPlace wisata = new ModelPlace();
                                 wisata.setNama(wisataObj.getString("nama"));
                                 wisata.setId(wisataObj.getString("id"));
                                 wisata.setKategori("Kategori: " + wisataObj.getString("kategori"));

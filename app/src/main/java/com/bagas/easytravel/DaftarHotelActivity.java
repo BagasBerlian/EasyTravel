@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import com.bagas.easytravel.API.Api;
 import com.bagas.easytravel.Adapter.HotelAdapter;
-import com.bagas.easytravel.Model.ModelHotel;
+import com.bagas.easytravel.Model.ModelPlace;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -48,7 +48,7 @@ public class DaftarHotelActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     RecyclerView recyclerViewHotel;
     HotelAdapter hotelAdapter;
-    List<ModelHotel> hotelList;
+    List<ModelPlace> hotelList;
 
     FusedLocationProviderClient fusedLocationClient;
     double userLatitude;
@@ -161,7 +161,7 @@ public class DaftarHotelActivity extends AppCompatActivity {
                             JSONArray hotels = response.getJSONArray("hotel");
                             for (int i = 0; i < hotels.length(); i++) {
                                 JSONObject hotelObj = hotels.getJSONObject(i);
-                                ModelHotel hotel = new ModelHotel();
+                                ModelPlace hotel = new ModelPlace();
 
                                 hotel.setNama(hotelObj.getString("nama"));
                                 hotel.setAlamat(hotelObj.getString("alamat"));

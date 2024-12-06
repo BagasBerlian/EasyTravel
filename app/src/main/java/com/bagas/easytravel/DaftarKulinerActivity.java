@@ -27,7 +27,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bagas.easytravel.API.Api;
 import com.bagas.easytravel.Adapter.KulinerAdapter;
-import com.bagas.easytravel.Model.ModelKuliner;
+import com.bagas.easytravel.Model.ModelPlace;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -48,7 +48,7 @@ public class DaftarKulinerActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     RecyclerView recyclerViewKuliner;
     KulinerAdapter kulinerAdapter;
-    List<ModelKuliner> kulinerList;
+    List<ModelPlace> kulinerList;
 
     FusedLocationProviderClient fusedLocationClient;
     double userLatitude;
@@ -161,7 +161,7 @@ public class DaftarKulinerActivity extends AppCompatActivity {
                             JSONArray kuliners = response.getJSONArray("kuliner");
                             for (int i = 0; i < kuliners.length(); i++) {
                                 JSONObject kulinerObj = kuliners.getJSONObject(i);
-                                ModelKuliner kuliner = new ModelKuliner();
+                                ModelPlace kuliner = new ModelPlace();
 
                                 String koordinat = kulinerObj.optString("kordinat", "");
                                 if (koordinat.contains(",")) {

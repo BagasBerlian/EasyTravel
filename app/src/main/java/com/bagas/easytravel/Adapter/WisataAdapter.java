@@ -19,8 +19,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bagas.easytravel.API.Api;
 import com.bagas.easytravel.DetailsActivity;
-import com.bagas.easytravel.Model.ModelHotel;
-import com.bagas.easytravel.Model.ModelWisata;
+import com.bagas.easytravel.Model.ModelPlace;
 import com.bagas.easytravel.R;
 import com.bumptech.glide.Glide;
 
@@ -31,9 +30,9 @@ import java.util.List;
 
 public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataViewHolder> {
 
-    private final List<ModelWisata> wisataList;
+    private final List<ModelPlace> wisataList;
 
-    public WisataAdapter(List<ModelWisata> wisataList) {
+    public WisataAdapter(List<ModelPlace> wisataList) {
         this.wisataList = wisataList;
     }
 
@@ -47,7 +46,7 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataView
 
     @Override
     public void onBindViewHolder(@NonNull WisataAdapter.WisataViewHolder holder, int position) {
-        ModelWisata wisata = wisataList.get(position);
+        ModelPlace wisata = wisataList.get(position);
         holder.tvWisataName.setText(wisata.getNama());
         holder.tvWisataKategori.setText(wisata.getKategori());
 

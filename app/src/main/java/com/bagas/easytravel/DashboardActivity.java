@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,6 +41,8 @@ public class DashboardActivity extends AppCompatActivity {
     CardView hotelCard, wisataCard, kulinerCard;
     LinearLayout profileCard;
     TextView namaUser, tanggal;
+
+    FirebaseFirestore db;
     FirebaseAuth mAuth;
     FirebaseUser user;
 
@@ -57,6 +62,7 @@ public class DashboardActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getUserLocation();
 
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
@@ -177,8 +183,28 @@ public class DashboardActivity extends AppCompatActivity {
         namaUser = findViewById(R.id.namaUser);
         if (user != null) {
             String email = user.getEmail();
-            String username = email != null ? email.split("@")[0] : "Guest";
-            namaUser.setText(username);
+
+            db.collection("users")
+                    .whereEqualTo("email", email)
+                    .addSnapshotListener((querySnapshot, e) -> {
+                        if (e != null) {
+                            namaUser.setText("Guest");
+                            Log.d("Firestore", "Error getting documents: " + e.getMessage());
+                            return;
+                        }
+
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                            String nama = document.getString("nama");
+                            if (nama != null) {
+                                namaUser.setText(nama);
+                            } else {
+                                namaUser.setText("Guest");
+                            }
+                        } else {
+                            namaUser.setText("Guest");
+                        }
+                    });
         }
     }
 

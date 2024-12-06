@@ -2,14 +2,24 @@ package com.bagas.easytravel.Model;
 
 import java.io.Serializable;
 
-public class ModelWisata implements Serializable {
+public class ModelPlace implements Serializable {
     private String id;
     private String nama;
-    private String kategori;
     private String gambar;
+    private String alamat;
+    private String jamBuka;
+    private String kategori;
     private double latitude;
     private double longitude;
     private float distance;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getNama() {
         return nama;
@@ -17,14 +27,6 @@ public class ModelWisata implements Serializable {
 
     public void setNama(String nama) {
         this.nama = nama;
-    }
-
-    public String getKategori() {
-        return kategori;
-    }
-
-    public void setKategori(String kategori) {
-        this.kategori = kategori;
     }
 
     public String getGambar() {
@@ -35,12 +37,28 @@ public class ModelWisata implements Serializable {
         this.gambar = gambar;
     }
 
-    public String getId() {
-        return id;
+    public String getAlamat() {
+        return alamat;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public String getJamBuka() {
+        return jamBuka;
+    }
+
+    public void setJamBuka(String jamBuka) {
+        this.jamBuka = jamBuka;
+    }
+
+    public String getKategori() {
+        return kategori;
+    }
+
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
     }
 
     public double getLatitude() {

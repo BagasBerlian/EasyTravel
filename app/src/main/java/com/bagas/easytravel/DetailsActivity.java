@@ -52,7 +52,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     float totalRating;
     int commentCount;
-    float rataRating;
 
     double latitude;
     double longitude;
@@ -73,9 +72,74 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_details);
-        initBackBtn();
-        initMoreCommentBtn();
+        initUI();
+        initFirebase();
 
+        if (user == null) {
+            redirectToMain();
+        } else {
+            loadDataFromIntent();
+            handleMaps();
+            initComment();
+            checkBookmark();
+            initCommentBtn(type);
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    private void loadDataFromIntent() {
+        Intent intent = getIntent();
+
+        type = intent.getStringExtra("type");
+        nama = intent.getStringExtra("nama");
+        alamat = intent.getStringExtra("alamat");
+        deskripsi = intent.getStringExtra("deskripsi");
+        jamBuka = intent.getStringExtra("jam-buka");
+        gambar = intent.getStringExtra("gambar");
+        distance = intent.getFloatExtra("koordinat", 0);
+        latitude = intent.getDoubleExtra("latitude", 0.0);
+        longitude = intent.getDoubleExtra("longitude", 0.0);
+
+        // Set default values if data is null
+        if (nama == null) nama = "Nama tidak ditemukan";
+        if (alamat == null) alamat = intent.getStringExtra("kategori");
+        if (jamBuka == null) tvJamBuka.setVisibility(View.GONE);
+        if (deskripsi == null) txtAboutPlace.setVisibility(View.GONE);
+
+        formattedDistance = String.format("%.2f", distance);
+        tampilanDistance = formattedDistance + " KM dari tempat anda";
+
+        // Update UI
+        tvNama.setText(nama);
+        tvAlamat.setText(alamat);
+        tvDeskripsi.setText(deskripsi);
+        tvDistance.setText(tampilanDistance);
+        tvJamBuka.setText(jamBuka);
+        Glide.with(this)
+                .load(gambar)
+                .placeholder(R.drawable.grama_tirta_jatiluhur)
+                .error(R.drawable.grama_tirta_jatiluhur)
+                .into(tvGambar);
+    }
+
+    private void redirectToMain() {
+        startActivity(new Intent(DetailsActivity.this, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+    }
+
+    private void initFirebase() {
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        getUserId = user != null ? user.getUid() : null;
+    }
+
+    private void initUI() {
         tvNama = findViewById(R.id.NamaTempat);
         tvDeskripsi = findViewById(R.id.DeskripsiTempat);
         tvAlamat = findViewById(R.id.AlamatTempat);
@@ -88,75 +152,8 @@ public class DetailsActivity extends AppCompatActivity {
         txtRatingValue = findViewById(R.id.RatingValue);
         buttonBookmark = findViewById(R.id.BookmarkButton);
 
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        getUserId = user.getUid();
-
-        if (user == null) {
-            startActivity(new Intent(DetailsActivity.this, MainActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        }
-
-        type = getIntent().getStringExtra("type");
-        initCommentBtn(type);
-
-        nama = getIntent().getStringExtra("nama");
-        if (nama == null || nama.isEmpty()) {
-            nama = "Nama tidak ditemukan";
-        }
-
-        if (getIntent().getStringExtra("alamat") != null) {
-            alamat = getIntent().getStringExtra("alamat");
-        } else {
-            // Kondisi khusus Wisata
-            iconMap.setVisibility(View.GONE);
-            alamat = getIntent().getStringExtra("kategori");
-        }
-
-        gambar = getIntent().getStringExtra("gambar");
-
-        distance = getIntent().getFloatExtra("koordinat", 0);
-        formattedDistance = String.format("%.2f", distance);
-        tampilanDistance = formattedDistance + " KM dari tempat anda";
-
-        if (getIntent().getStringExtra("deskripsi") != null) {
-            deskripsi = getIntent().getStringExtra("deskripsi");
-        } else {
-            txtAboutPlace.setVisibility(View.GONE);
-        }
-
-        if (getIntent().getStringExtra("jam-buka") != null) {
-            jamBuka = getIntent().getStringExtra("jam-buka");
-        } else {
-            tvJamBuka.setVisibility(View.GONE);
-        }
-
-        latitude = getIntent().getDoubleExtra("latitude", 0.0);
-        longitude = getIntent().getDoubleExtra("longitude", 0.0);
-        handleMaps();
-
-        tvNama.setText(nama);
-        tvDeskripsi.setText(deskripsi);
-        tvAlamat.setText(alamat);
-        tvDistance.setText(tampilanDistance);
-        tvJamBuka.setText(jamBuka);
-        Glide.with(this)
-                .load(gambar)
-                .placeholder(R.drawable.grama_tirta_jatiluhur)
-                .error(R.drawable.grama_tirta_jatiluhur)
-                .into(tvGambar);
-
-        initComment();
-        checkBookmark();
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        initBackBtn();
+        initMoreCommentBtn();
     }
 
     private void checkBookmark() {
