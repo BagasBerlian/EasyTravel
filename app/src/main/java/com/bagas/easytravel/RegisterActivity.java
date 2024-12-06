@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
             userData.put("uuid", user.getUid());
             userData.put("nama", nama);
             userData.put("email", email);
-            userData.put("password", password);
+            userData.put("password", hashedPassword);
             userData.put("created_at", System.currentTimeMillis());
             userData.put("updated_at", null);
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -128,8 +129,9 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mAuth.signOut();
                 startActivity(new Intent(getBaseContext(), MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                Toast.makeText(getApplicationContext(), "Kehadiran anda akan selalu kami tunggu.", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }

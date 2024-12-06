@@ -12,6 +12,10 @@ public class ModelComment implements Serializable {
     private Timestamp timestamp;
     private String userId;
     private String username;
+    private String type;
+
+    public ModelComment() {
+    }
 
     public String getComment() {
         return comment;
@@ -59,5 +63,26 @@ public class ModelComment implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "ModelComment{" +
+                "userId='" + userId + '\'' +
+                ", placeId='" + placeId + '\'' +
+                ", comment='" + comment + '\'' +
+                ", type='" + type + '\'' +
+                ", rating=" + rating +
+                ", username='" + username + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

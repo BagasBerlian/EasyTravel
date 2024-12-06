@@ -45,25 +45,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd MMM yyyy", Locale.getDefault());
         holder.timestamp.setText(sdf.format(comment.getTimestamp().toDate()));
 
-//        int starResource = getRatingStarResource(comment.getRating());
-//        holder.imgRatingStar.setImageResource(starResource);
     }
 
     @Override
     public int getItemCount() {
         return commentList.size();
     }
-
-//    private int getRatingStarResource(int rating) {
-//        switch (rating) {
-//            case 1: return R.drawable.ic_star_1;
-//            case 2: return R.drawable.ic_star_2;
-//            case 3: return R.drawable.ic_star_3;
-//            case 4: return R.drawable.ic_star_4;
-//            case 5: return R.drawable.ic_star_5;
-//            default: return R.drawable.ic_star_empty;  // Default star image
-//        }
-//    }
 
     static class CommentViewHolder extends RecyclerView.ViewHolder {
         TextView userName, description, timestamp, commentRating;

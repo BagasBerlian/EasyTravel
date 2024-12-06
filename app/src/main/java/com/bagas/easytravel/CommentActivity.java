@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -100,40 +101,55 @@ public class CommentActivity extends AppCompatActivity {
                 .whereEqualTo("placeId", placeId)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((querySnapshot, e) -> {
+                    if (e != null) {
+                        Log.e("CommentActivity", "Error saat mengambil data komentar", e);
+                        progressDialog.dismiss();
+                        return;
+                    }
                     progressDialog.dismiss();
-                    if (!querySnapshot.isEmpty()) {
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        Log.d("CommentActivity", "Jumlah komentar: " + querySnapshot.size());
                         commentList.clear();
                         List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                         String currentUserId = user.getUid();
-                        for (int i = 0; i < documents.size(); i++) {
-                            ModelComment comment = documents.get(i).toObject(ModelComment.class)    ;
-                            String userId = comment.getUserId();
+                        for (DocumentSnapshot document : documents) {
+                            Log.d("CommentActivity", "Data Komentar: " + document.getData());
 
-                            db.collection("users")
-                                    .whereEqualTo("uuid", userId)
-                                    .get()
-                                    .addOnSuccessListener(userQuery -> {
-                                        if (!userQuery.isEmpty()) {
-                                            String username = userQuery.getDocuments().get(0).getString("nama");
-                                            if (userId.equals(currentUserId)) {
-                                                username = "saya";
-                                            }
-                                            comment.setUsername(username);
-                                            commentList.add(comment);
-                                            if (commentList.size() == documents.size()) {
+                            ModelComment comment = document.toObject(ModelComment.class);
+                            if (comment != null) {
+                                String userId = comment.getUserId();
+
+                                db.collection("users")
+                                        .whereEqualTo("uuid", userId)
+                                        .get()
+                                        .addOnSuccessListener(userQuery -> {
+                                            if (!userQuery.isEmpty()) {
+                                                String username = userQuery.getDocuments().get(0).getString("nama");
+                                                if (userId.equals(currentUserId)) {
+                                                    username = "saya";
+                                                }
+                                                comment.setUsername(username);
+
+                                                commentList.add(comment);
+
+                                                Log.d("CommentActivity", "Komentar Setelah Update: " + comment.toString());
+
                                                 commentAdapter.notifyDataSetChanged();
                                             }
-                                        }
-                                    })
-                                    .addOnFailureListener(err -> {
-                                        Log.d("load_comment", "Gagal mengambil data user", err);
-                                    });
+                                        })
+                                        .addOnFailureListener(err -> {
+                                            Log.e("CommentActivity", "Gagal mengambil data user", err);
+                                        });
+                            } else {
+                                Log.e("CommentActivity", "Gagal mengonversi dokumen ke ModelComment");
+                            }
                         }
                     } else {
                         Log.d("CommentActivity", "Tidak ada komentar ditemukan");
                     }
                 });
     }
+
 
     private void initBackBtn() {
         backBtn = findViewById(R.id.backButton);

@@ -22,13 +22,15 @@ import com.bagas.easytravel.DetailsActivity;
 import com.bagas.easytravel.Model.ModelPlace;
 import com.bagas.easytravel.R;
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 
-public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataViewHolder> {
+public class    WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataViewHolder> {
 
     private final List<ModelPlace> wisataList;
 
@@ -55,6 +57,32 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataView
                 .placeholder(R.drawable.iconn)
                 .error(R.drawable.iconn)
                 .into(holder.tvWisataGambar);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("comments")
+                .whereEqualTo("placeId", wisata.getNama())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        double totalRating = 0;
+                        int count = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Double rating = document.getDouble("rating");
+                            if (rating != null) {
+                                totalRating += rating;
+                                count++;
+                            }
+                        }
+                        if (count > 0) {
+                            double averageRating = totalRating / count;
+                            holder.tvRating.setText(String.format("Rating: %.1f", averageRating));
+                        } else {
+                            holder.tvRating.setText("Rating: -");
+                        }
+                    } else {
+                        holder.tvRating.setText("Rating: -");
+                    }
+                });
 
         holder.itemView.setOnClickListener(view -> {
             Context context = holder.itemView.getContext();
@@ -113,7 +141,7 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataView
     }
 
     public class WisataViewHolder extends RecyclerView.ViewHolder {
-        TextView tvWisataName, tvWisataKategori;
+        TextView tvWisataName, tvWisataKategori, tvRating;
         ImageView tvWisataGambar;
 
         public WisataViewHolder(@NonNull View itemView) {
@@ -121,6 +149,7 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.WisataView
             tvWisataName = itemView.findViewById(R.id.tvWisataName);
             tvWisataKategori = itemView.findViewById(R.id.tvWisataKategori);
             tvWisataGambar = itemView.findViewById(R.id.imgWisata);
+            tvRating = itemView.findViewById(R.id.tvRatingWisata);
         }
     }
 }

@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    Bookmark Button-->
+    <!--    Bookmark Button-->
     <ImageButton
         android:id="@+id/BookmarkButton"
         android:layout_width="50dp"
@@ -57,204 +57,227 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/bgTempat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerInside"
-        android:adjustViewBounds="true"
-        android:src="@drawable/grama_tirta_jatiluhur"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/whiteFrame"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingBottom="70dp"
+        app:layout_constraintBaseline_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/commentButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/bgTempat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/grama_tirta_jatiluhur"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:background="@color/whiteFrame"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <!--                Nama Tempat-->
-                <TextView
-                    android:id="@+id/NamaTempat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Grama Tirta Jatiluhur"
-                    android:textColor="@color/blackText"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                android:gravity="top"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:gravity="top|start"
-                    android:paddingVertical="5dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/iconMap"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/location"
-                        android:visibility="visible" />
-
-                    <!--                    Alamat Tempat-->
+                    <!--                Nama Tempat-->
                     <TextView
-                        android:id="@+id/AlamatTempat"
+                        android:id="@+id/NamaTempat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Grama Tirta Jatiluhur"
+                        android:textColor="@color/blackText"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="top|start"
+                        android:paddingVertical="5dp">
+
+                        <ImageView
+                            android:id="@+id/iconMap"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/location"
+                            android:visibility="visible" />
+
+                        <!--                    Alamat Tempat-->
+                        <TextView
+                            android:id="@+id/AlamatTempat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="Jatimekar, Jatiluhur"
+                            android:textColor="@color/subTextColor"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="5dp"
+                            android:src="@drawable/star_rating" />
+
+                        <!--                    Nilai Rating Tempat-->
+                        <TextView
+                            android:id="@+id/RatingValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/blackText"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <!-- Distance -->
+                        <TextView
+                            android:id="@+id/distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:maxLines="1"
+                            android:textColor="@color/blackText"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/jamBuka"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="Jatimekar, Jatiluhur"
+                        android:layout_marginTop="10dp"
+                        android:text="Jam Buka"
                         android:textColor="@color/subTextColor"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/star_rating" />
-
-                    <!--                    Nilai Rating Tempat-->
-                    <TextView
-                        android:id="@+id/RatingValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/blackText"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <!-- Distance -->
-                    <TextView
-                        android:id="@+id/distance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:maxLines="1"
-                        android:textColor="@color/blackText"
-                        android:textSize="18sp" />
+                        android:textStyle="italic" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/jamBuka"
+                <ImageButton
+                    android:id="@+id/ButtonMaps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Jam Buka"
-                    android:textColor="@color/subTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="italic" />
+                    android:layout_marginStart="30dp"
+                    android:background="@drawable/shape"
+                    android:backgroundTint="@color/blackText"
+                    android:padding="15dp"
+                    android:src="@drawable/maps" />
 
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/ButtonMaps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:background="@drawable/shape"
-                android:backgroundTint="@color/blackText"
-                android:padding="15dp"
-                android:src="@drawable/maps" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtAboutPlace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="5dp"
-            android:text="About Place"
-            android:textColor="@color/blackText"
-            android:textSize="24sp" />
-
-        <!--        Deskripsi Tempat-->
-        <TextView
-            android:id="@+id/DeskripsiTempat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="5dp"
-            android:maxLines="4"
-            android:text="You will get a complete travel package on the beaches. Packages in the form of airline tickets, recommended Hotel rooms, Transportation, Have you ever been on holiday to the Greek ETC... Read More"
-            android:textColor="@color/subTextColor"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
-                android:text="Comments &amp; Rating"
-                android:textColor="@color/blackText"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/BukaKomentar"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="end"
-                android:text="More"
-                android:textColor="@color/orange"
-                android:textSize="18sp" />
+                android:layout_height="match_parent">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtAboutPlace"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="About Place"
+                        android:textColor="@color/blackText"
+                        android:textSize="24sp" />
+
+                    <!--        Deskripsi Tempat-->
+                    <TextView
+                        android:id="@+id/DeskripsiTempat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="5dp"
+                        android:maxLines="4"
+                        android:text="You will get a complete travel package on the beaches. Packages in the form of airline tickets, recommended Hotel rooms, Transportation, Have you ever been on holiday to the Greek ETC... Read More"
+                        android:textColor="@color/subTextColor"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Comments &amp; Rating"
+                            android:textColor="@color/blackText"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:id="@+id/BukaKomentar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="end"
+                            android:text="More"
+                            android:textColor="@color/orange"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <!--        RecyclerView untuk menampilkan komentar sebagian-->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvComment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="2" />
+
+
+                </LinearLayout>
+            </ScrollView>
+            <!--        Buka Halaman List Komentar-->
         </LinearLayout>
-
-        <!--        RecyclerView untuk menampilkan komentar sebagian-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            tools:itemCount="3" />
-
-        <!--        Buka Halaman List Komentar-->
-        <Button
-            android:id="@+id/commentButton"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/primary"
-            android:padding="10dp"
-            android:text="Add New Comment"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/commentButton"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginHorizontal="10dp"
+        android:backgroundTint="@color/primary"
+        android:padding="10dp"
+        android:text="Add New Comment"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

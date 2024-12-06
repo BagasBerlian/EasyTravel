@@ -74,6 +74,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         initUI();
         initFirebase();
+        initBackBtn();
 
         if (user == null) {
             redirectToMain();
@@ -83,6 +84,7 @@ public class DetailsActivity extends AppCompatActivity {
             initComment();
             checkBookmark();
             initCommentBtn(type);
+            initMoreCommentBtn();
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -151,9 +153,6 @@ public class DetailsActivity extends AppCompatActivity {
         txtAboutPlace = findViewById(R.id.txtAboutPlace);
         txtRatingValue = findViewById(R.id.RatingValue);
         buttonBookmark = findViewById(R.id.BookmarkButton);
-
-        initBackBtn();
-        initMoreCommentBtn();
     }
 
     private void checkBookmark() {
@@ -239,7 +238,9 @@ public class DetailsActivity extends AppCompatActivity {
                                                 username = "saya";
                                             }
                                             comment.setUsername(username);
-                                            commentList.add(comment);
+                                            if (!commentList.contains(comment)) {
+                                                commentList.add(comment);
+                                            }
                                             if (commentList.size() == documents.size()) {
                                                 Float averageRating = totalRating / commentCount;
                                                 txtRatingValue.setText(String.format("%.1f", averageRating));

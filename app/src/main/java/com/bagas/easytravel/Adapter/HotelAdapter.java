@@ -16,6 +16,8 @@ import com.bagas.easytravel.Model.ModelPlace;
 import com.bagas.easytravel.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.BreakIterator;
 import java.util.List;
@@ -54,6 +56,30 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
                 .error(R.drawable.iconn)
                 .into(holder.tvHotelGambar);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("comments")
+                .whereEqualTo("placeId", hotel.getNama())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        double totalRating = 0;
+                        int count = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            double rating = document.getDouble("rating");
+                            totalRating += rating;
+                            count++;
+                        }
+                        if (count > 0) {
+                            double averageRating = totalRating / count;
+                            holder.tvRating.setText(String.format("Rating: %.1f", averageRating));
+                        } else {
+                            holder.tvRating.setText("Rating: -");
+                        }
+                    } else {
+                        holder.tvRating.setText("Rating: -");
+                    }
+                });
+
         holder.itemView.setOnClickListener(view -> {
             Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, DetailsActivity.class);
@@ -74,7 +100,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
     }
 
     public class HotelViewHolder extends RecyclerView.ViewHolder {
-        TextView tvHotelName, tvHotelAlamat;
+        TextView tvHotelName, tvHotelAlamat, tvRating;
         ImageView tvHotelGambar;
 
         public HotelViewHolder(@NonNull View itemView) {
@@ -82,6 +108,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
             tvHotelName = itemView.findViewById(R.id.tvHotelName);
             tvHotelAlamat = itemView.findViewById(R.id.tvHotelAlamat);
             tvHotelGambar = itemView.findViewById(R.id.imgHotel);
+            tvRating = itemView.findViewById(R.id.tvRating);
         }
     }
 }
